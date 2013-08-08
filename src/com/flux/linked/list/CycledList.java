@@ -50,7 +50,7 @@ public class CycledList<T> {
 	public Entry<T> getPointer(){
 		return pointer;
 	}
-	private static class Entry<T> {
+	protected static class Entry<T> {
 		private T value;
 		private Entry<T> next;
 		
@@ -59,19 +59,19 @@ public class CycledList<T> {
 			this.next = next;
 		}
 		
-		private T getValue(){
+		protected T getValue(){
 			return this.value;
 		}
 		
-		public void setValue(T value) {
+		protected void setValue(T value) {
 			this.value = value;
 		}
 
-		private Entry<T> getNext(){
+		protected Entry<T> getNext(){
 			return this.next;
 		}
 
-		public void setNext(Entry<T> next) {
+		protected void setNext(Entry<T> next) {
 			this.next = next;
 		}
 		
