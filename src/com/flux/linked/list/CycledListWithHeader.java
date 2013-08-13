@@ -6,7 +6,6 @@ import java.util.ListIterator;
 public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T> {
 
 	private Entry<T> header;
-	private Entry<T> pointer;
 
 	public CycledListWithHeader() {
 		init();
@@ -29,7 +28,8 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 	}
 
 	private void init() {
-		header = new Entry<T>(null, header);
+		header = new Entry<T>(null, null);
+		header.setNext(header);
 	}
 
 	protected final class CycledListWithHeadeIterator<T> implements ListIterator<T> {
