@@ -15,7 +15,7 @@ public class BasicOperationPerformerTest {
 	@Test
 	public void shouldAddSortedPolinoms() {
 		CycledListWithHeader<Coefficient>[] polinomsToAdd = new CycledListWithHeader[]{firstPolinom, secondPolinom};
-		CycledListWithHeader<Coefficient> actualResult = BasicOperationsPerformer.addPolinoms(polinomsToAdd);
+		CycledListWithHeader<Coefficient> actualResult = BasicOperationsPerformer.addSortedPolinoms(polinomsToAdd);
 		
 		assertEquals(resultPolinom, actualResult);
 		

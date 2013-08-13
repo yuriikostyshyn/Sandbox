@@ -1,6 +1,6 @@
 package com.flux.polinom;
 
-public class Coefficient {
+public class Coefficient implements Comparable<Coefficient> {
 	private final int[] powers;
 	private double coefficientValue;
 
@@ -29,6 +29,29 @@ public class Coefficient {
 
 	public int[] getPowers() {
 		return powers;
+	}
+
+	public void addCoefficientValue(double coefficientValue) {
+		this.coefficientValue += coefficientValue;
+	}
+
+	@Override
+	public int compareTo(Coefficient o) {
+		int result = 0;
+
+		if (this.getPowersSum() != o.getPowersSum()) {
+			result = this.getPowersSum() > o.getPowersSum() ? 1 : -1;
+		} else {
+			for (int i = 0; i < this.getPowers().length; i++) { // we assume that this and o have equal number of variables. FIXME
+				int difference = this.getPowers()[i] - o.getPowers()[i];
+				if (difference != 0) {
+					result = difference;
+					break;
+				}
+			}
+		}
+
+		return result;
 	}
 
 }

@@ -1,8 +1,9 @@
 package com.flux.linked.list;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
-public class CycledListWithHeader<T> extends CycledList<T> {
+public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T> {
 
 	private Entry<T> header;
 	private Entry<T> pointer;
@@ -11,6 +12,7 @@ public class CycledListWithHeader<T> extends CycledList<T> {
 		init();
 	}
 
+	@Override
 	public void addFirst(T value) {
 		if (value != null) {
 			Entry<T> newEntry = new Entry<T>(value, header.getNext());
@@ -21,29 +23,33 @@ public class CycledListWithHeader<T> extends CycledList<T> {
 	public Iterator<T> iterator() {
 		return new CycledListWithHeadeIterator<T>(header);
 	}
+	
+	public ListIterator<T> listIterator() {
+		return new CycledListWithHeadeIterator<T>(header);
+	}
 
 	private void init() {
 		header = new Entry<T>(null, header);
 	}
 
-	protected final class CycledListWithHeadeIterator<T> implements Iterator<T> {
+	protected final class CycledListWithHeadeIterator<T> implements ListIterator<T> {
 
-		private Entry<T> next;
+		private Entry<T> current;
 
 		protected CycledListWithHeadeIterator(Entry<T> header) {
-			this.next = header.getNext();
+			this.current = header;
 		}
 
 		@Override
 		public boolean hasNext() {
-			return next != header;
+			return current.getNext() != header;
 		}
 
 		@Override
 		public T next() {
-			if (next != header) {
-				T result = next.getValue();
-				next = next.getNext();
+			if (current.getNext() != header) {
+				current = current.getNext();
+				T result = current.getValue();
 				return result;
 			}else{
 				throw new IndexOutOfBoundsException("You've reached end of the list");
@@ -56,6 +62,61 @@ public class CycledListWithHeader<T> extends CycledList<T> {
 
 		}
 
+		@Override
+		public void add(T elementToAdd) {
+			Entry<T> newEntry = new Entry<T>(elementToAdd, current.getNext());
+			current.setNext(newEntry);
+			current = newEntry;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public int nextIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public T previous() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public int previousIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void set(T arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+	}
+	
+	@Override
+	public CycledListWithHeader<T> clone(){
+		CycledListWithHeader<T> result = new CycledListWithHeader<T>();
+		
+		CycledListWithHeader<T> intermediateResult = new CycledListWithHeader<T>();
+	
+		//FIXME we need faster and more elegant way to perform clone
+		for(T element: this){
+			intermediateResult.addFirst(element);
+		}
+		
+		for(T element: intermediateResult){
+			result.addFirst(element);
+		}
+		
+		return result;
 	}
 
 }
