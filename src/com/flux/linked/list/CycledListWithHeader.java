@@ -3,10 +3,11 @@ package com.flux.linked.list;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import com.flux.linked.queue.LinkedQueue;
+
 public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T> {
 
 	private Entry<T> header;
-	private Entry<T> pointer;
 
 	public CycledListWithHeader() {
 		init();
@@ -29,7 +30,8 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 	}
 
 	private void init() {
-		header = new Entry<T>(null, header);
+		header = new Entry<T>(null, null);
+		header.setNext(header);
 	}
 
 	protected final class CycledListWithHeadeIterator<T> implements ListIterator<T> {
@@ -102,6 +104,33 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 	}
 	
 	@Override
+	public boolean equals(Object obj){
+		if(obj == null){
+			return false;
+		}else if(!(obj instanceof CycledListWithHeader)){
+			return false;
+		}else if(!(this == obj)){
+			return false;
+		}
+		
+		Iterator<T> thisIterator = this.iterator();
+		Iterator<T> objectIterator = ((CycledListWithHeader) obj).iterator();
+		
+		while (thisIterator.hasNext() && objectIterator.hasNext()) {
+			if (!thisIterator.next().equals(objectIterator.next())) {
+				return false;
+			}
+		}
+		
+		if(thisIterator.hasNext() || objectIterator.hasNext()){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
+	@Override
 	public CycledListWithHeader<T> clone(){
 		CycledListWithHeader<T> result = new CycledListWithHeader<T>();
 		
@@ -117,6 +146,15 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public String toString(){
+		StringBuilder result = new StringBuilder();
+		for(T element: this){
+			result.append(element.toString() + ", ");
+		}
+		return result.toString();
 	}
 
 }

@@ -53,5 +53,10 @@ public class Coefficient implements Comparable<Coefficient> {
 
 		return result;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return false;
+	}
 
 }
