@@ -1,5 +1,9 @@
 package com.flux.polinom;
 
+import java.util.Iterator;
+
+import com.flux.linked.list.CycledListWithHeader;
+
 public class Coefficient implements Comparable<Coefficient> {
 	private final int[] powers;
 	private double coefficientValue;
@@ -53,10 +57,40 @@ public class Coefficient implements Comparable<Coefficient> {
 
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		return false;
+		if (obj == null) {
+			return false;
+		} else if (!(obj instanceof CycledListWithHeader)) {
+			return false;
+		} else if (!(this == obj)) {
+			return false;
+		}
+
+		Coefficient that = (Coefficient) obj;
+
+		if (this.coefficientValue != that.getCoefficientValue()) {
+			return false;
+		}
+
+		if (!this.getPowers().equals(that.getPowers())) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+
+		result.append("Coefficient :" + coefficientValue);
+		for (int power : powers) {
+			result.append("," + power);
+		}
+
+		return result.toString();
 	}
 
 }

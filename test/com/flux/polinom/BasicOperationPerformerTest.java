@@ -24,7 +24,7 @@ public class BasicOperationPerformerTest {
 	private static CycledListWithHeader<Coefficient> createFirstPolinom() {
 		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
 
-		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 3.3));
+		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 3.4));
 		result.addFirst(new Coefficient(new int[] { 2, 1, 1 }, 2.1));
 		result.addFirst(new Coefficient(new int[] { 3, 2, 1 }, 7.3));
 		result.addFirst(new Coefficient(new int[] { 3, 2, 2 }, 3.5));
@@ -48,7 +48,7 @@ public class BasicOperationPerformerTest {
 	private static CycledListWithHeader<Coefficient> createResultPolinom() {
 		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
 
-		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 7.2));
+		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 7.3));
 		result.addFirst(new Coefficient(new int[] { 2, 1, 1 }, 2.1));
 		result.addFirst(new Coefficient(new int[] { 2, 2, 1 }, 5.1));
 		result.addFirst(new Coefficient(new int[] { 3, 2, 1 }, 15));

@@ -22,10 +22,13 @@ public class BasicOperationsPerformer {
 						if (comparationResult < 0) {
 							continue;
 						} else if (comparationResult > 0) {
-							resultIterator.add(currentResultElement);
+							resultIterator.add(currentElement);
 							break;
 						} else if (comparationResult == 0) {
 							currentResultElement.addCoefficientValue(currentElement.getCoefficientValue());
+							if(currentResultElement.getCoefficientValue() == 0.0){
+								resultIterator.remove();
+							}
 							break;
 						}
 					}

@@ -24,7 +24,7 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 	public Iterator<T> iterator() {
 		return new CycledListWithHeadeIterator<T>(header);
 	}
-	
+
 	public ListIterator<T> listIterator() {
 		return new CycledListWithHeadeIterator<T>(header);
 	}
@@ -34,11 +34,15 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 		header.setNext(header);
 	}
 
+
+	//Designed for polinom addition purposes
 	protected final class CycledListWithHeadeIterator<T> implements ListIterator<T> {
 
+		private Entry<T> previous;
 		private Entry<T> current;
 
 		protected CycledListWithHeadeIterator(Entry<T> header) {
+			this.previous = header;
 			this.current = header;
 		}
 
@@ -50,24 +54,25 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 		@Override
 		public T next() {
 			if (current.getNext() != header) {
+				previous = current;
 				current = current.getNext();
 				T result = current.getValue();
 				return result;
-			}else{
+			} else {
 				throw new IndexOutOfBoundsException("You've reached end of the list");
 			}
 		}
 
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-
+			previous.setNext(current.getNext());
+			current = current.getNext();
 		}
 
 		@Override
 		public void add(T elementToAdd) {
-			Entry<T> newEntry = new Entry<T>(elementToAdd, current.getNext());
-			current.setNext(newEntry);
+			Entry<T> newEntry = new Entry<T>(elementToAdd, current);
+			previous.setNext(newEntry);
 			current = newEntry;
 		}
 
@@ -98,60 +103,59 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 		@Override
 		public void set(T arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}
-	
+
 	@Override
-	public boolean equals(Object obj){
-		if(obj == null){
+	public boolean equals(Object obj) {
+		if (obj == null) {
 			return false;
-		}else if(!(obj instanceof CycledListWithHeader)){
+		} else if (!(obj instanceof CycledListWithHeader)) {
 			return false;
-		}else if(!(this == obj)){
+		} else if (!(this == obj)) {
 			return false;
 		}
-		
+
 		Iterator<T> thisIterator = this.iterator();
 		Iterator<T> objectIterator = ((CycledListWithHeader) obj).iterator();
-		
+
 		while (thisIterator.hasNext() && objectIterator.hasNext()) {
 			if (!thisIterator.next().equals(objectIterator.next())) {
 				return false;
 			}
 		}
-		
-		if(thisIterator.hasNext() || objectIterator.hasNext()){
+
+		if (thisIterator.hasNext() || objectIterator.hasNext()) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	
+
 	@Override
-	public CycledListWithHeader<T> clone(){
+	public CycledListWithHeader<T> clone() {
 		CycledListWithHeader<T> result = new CycledListWithHeader<T>();
-		
+
 		CycledListWithHeader<T> intermediateResult = new CycledListWithHeader<T>();
-	
-		//FIXME we need faster and more elegant way to perform clone
-		for(T element: this){
+
+		// FIXME we need faster and more elegant way to perform clone
+		for (T element : this) {
 			intermediateResult.addFirst(element);
 		}
-		
-		for(T element: intermediateResult){
+
+		for (T element : intermediateResult) {
 			result.addFirst(element);
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder result = new StringBuilder();
-		for(T element: this){
+		for (T element : this) {
 			result.append(element.toString() + ", ");
 		}
 		return result.toString();
