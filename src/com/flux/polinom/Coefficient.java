@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.flux.linked.list.CycledListWithHeader;
 
 public class Coefficient implements Comparable<Coefficient> {
-	private final int[] powers;
+	private int[] powers;
 	private double coefficientValue;
 
 	public Coefficient(int[] powers, double coefficientValue) {
@@ -42,13 +42,24 @@ public class Coefficient implements Comparable<Coefficient> {
 	public void multiplyOnCoefficient(Coefficient coefficient) {
 		this.coefficientValue = this.coefficientValue * coefficient.getCoefficientValue();
 		int newPowersLength = Math.max(this.powers.length, coefficient.powers.length);
-		int[] thisPowers = this.powers;
-		int[] thatPowers = coefficient.powers;
-		
-		int[] newPowers = new int[newPowersLength];
-		for (int i = 0; i < newPowersLength; i++) {
-			if(thisPowers.length)
+
+		int[] longer = this.powers;
+		int[] shorter = coefficient.powers;
+		if (longer.length < shorter.length) {
+			longer = coefficient.powers;
+			shorter = this.powers;
 		}
+
+		int[] newPowers = new int[newPowersLength];
+		for (int i = 0; i < shorter.length; i++) {
+			newPowers[i] = longer[i] + shorter[i];
+		}
+
+		for (int i = shorter.length; i < longer.length; i++) {
+			newPowers[i] = longer[i];
+		}
+
+		this.powers = newPowers;
 	}
 
 	@Override
