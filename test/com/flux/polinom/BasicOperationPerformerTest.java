@@ -11,6 +11,9 @@ public class BasicOperationPerformerTest {
 	private static final CycledListWithHeader<Coefficient> firstPolinom = createFirstPolinom();
 	private static final CycledListWithHeader<Coefficient> secondPolinom = createSecondPolinom();
 	private static final CycledListWithHeader<Coefficient> resultPolinom = createResultPolinom();
+	private static final CycledListWithHeader<Coefficient> firstPolinomForMultiplication = createFirstPolinomForMultiplication();
+	private static final CycledListWithHeader<Coefficient> secondPolinomForMultiplication = createSecondPolinomForMultiplication();
+	private static final CycledListWithHeader<Coefficient> resultPolinomForMultiplication = createResultPolinomForMultiplication();
 
 	@Test
 	public void shouldAddSortedPolinoms() {
@@ -21,6 +24,16 @@ public class BasicOperationPerformerTest {
 		
 	}
 
+	@Test
+	public void shouldMultiplySortedPolinoms() {
+		CycledListWithHeader<Coefficient>[] polinomsToMultiply = new CycledListWithHeader[]{firstPolinomForMultiplication, secondPolinomForMultiplication};
+		CycledListWithHeader<Coefficient> actualResult = BasicOperationsPerformer.multiplyPolinoms(polinomsToMultiply);
+		
+		assertEquals(resultPolinomForMultiplication.toString(), actualResult.toString());
+		
+	}
+
+	
 	private static CycledListWithHeader<Coefficient> createFirstPolinom() {
 		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
 
@@ -58,4 +71,31 @@ public class BasicOperationPerformerTest {
 		result.addFirst(new Coefficient(new int[] { 5, 3, 4 }, 6));
 		return result;
 	}
+	
+	private static CycledListWithHeader<Coefficient> createFirstPolinomForMultiplication() {
+		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
+
+		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 3.4));
+		result.addFirst(new Coefficient(new int[] { 3, 2, 2 }, 3.5));
+		return result;
+	}
+
+	private static CycledListWithHeader<Coefficient> createSecondPolinomForMultiplication() {
+		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
+
+		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 3.9));
+		result.addFirst(new Coefficient(new int[] { 2, 2, 1 }, 5.1));
+		return result;
+	}
+	
+	private static CycledListWithHeader<Coefficient> createResultPolinomForMultiplication() {
+		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
+
+		result.addFirst(new Coefficient(new int[] { 2, 0, 0 }, 13.26));
+		result.addFirst(new Coefficient(new int[] { 3, 2, 1 }, 17.34));
+		result.addFirst(new Coefficient(new int[] { 4, 2, 2 }, 13.65));
+		result.addFirst(new Coefficient(new int[] { 5, 4, 3 }, 17.85));
+		return result;
+	}
+	
 }

@@ -26,7 +26,6 @@ public class BasicOperationsPerformer {
 		CycledListWithHeader<Coefficient> result = null;
 		if (polinoms != null && polinoms.length == 2) {
 			Iterator<Coefficient> firstIterator = polinoms[0].iterator();
-			ListIterator<Coefficient> secondIterator = polinoms[1].listIterator();
 			while (firstIterator.hasNext()) {
 				Coefficient coefficient = firstIterator.next();
 				if (result == null) {
