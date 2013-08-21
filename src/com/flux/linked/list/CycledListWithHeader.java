@@ -22,11 +22,11 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 	}
 
 	public Iterator<T> iterator() {
-		return new CycledListWithHeadeIterator<T>(header);
+		return new CycledListWithHeadeIterator(header);
 	}
 
 	public ListIterator<T> listIterator() {
-		return new CycledListWithHeadeIterator<T>(header);
+		return new CycledListWithHeadeIterator(header);
 	}
 
 	private void init() {
@@ -36,7 +36,7 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 
 
 	//Designed for polinom addition purposes
-	protected final class CycledListWithHeadeIterator<T> implements ListIterator<T> {
+	protected final class CycledListWithHeadeIterator implements ListIterator<T> {
 
 		private Entry<T> previous;
 		private Entry<T> current;
