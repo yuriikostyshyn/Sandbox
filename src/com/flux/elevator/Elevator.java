@@ -1,5 +1,7 @@
 package com.flux.elevator;
 
+import com.flux.doublelinked.list.DoubleLinkedList;
+
 public class Elevator {
 	private static final int BASE_FLOOR = 2;
 
@@ -13,6 +15,7 @@ public class Elevator {
 
 	private ElevatorState currentState = ElevatorState.NEUTRAL;
 	private int currentFloor = BASE_FLOOR;
+	private DoubleLinkedList<ElevatorAction> actionQueue;
 
 	public Elevator(int floorCount) {
 		this.callCabine = new boolean[floorCount];
@@ -58,5 +61,15 @@ public class Elevator {
 		} else {
 			this.doorsOpen = true;
 		}
+		
+		//TODO have to be finished
+	}
+
+	public DoubleLinkedList<ElevatorAction> getActionQueue() {
+		return actionQueue;
+	}
+
+	public void setActionQueue(DoubleLinkedList<ElevatorAction> actionQueue) {
+		this.actionQueue = actionQueue;
 	}
 }
