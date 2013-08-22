@@ -39,29 +39,6 @@ public class Coefficient implements Comparable<Coefficient> {
 		this.coefficientValue += coefficientValue;
 	}
 
-	public void multiplyOnCoefficient(Coefficient coefficient) {
-		this.coefficientValue = this.coefficientValue * coefficient.getCoefficientValue();
-		int newPowersLength = Math.max(this.powers.length, coefficient.powers.length);
-
-		int[] longer = this.powers;
-		int[] shorter = coefficient.powers;
-		if (longer.length < shorter.length) {
-			longer = coefficient.powers;
-			shorter = this.powers;
-		}
-
-		int[] newPowers = new int[newPowersLength];
-		for (int i = 0; i < shorter.length; i++) {
-			newPowers[i] = longer[i] + shorter[i];
-		}
-
-		for (int i = shorter.length; i < longer.length; i++) {
-			newPowers[i] = longer[i];
-		}
-
-		this.powers = newPowers;
-	}
-
 	@Override
 	public int compareTo(Coefficient o) {
 		int result = 0;

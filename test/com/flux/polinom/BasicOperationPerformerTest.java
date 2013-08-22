@@ -84,7 +84,7 @@ public class BasicOperationPerformerTest {
 		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
 
 		result.addFirst(new Coefficient(new int[] { 1, 0, 0 }, 3.9));
-		result.addFirst(new Coefficient(new int[] { 2, 2, 1 }, 5.1));
+		result.addFirst(new Coefficient(new int[] { 2, 2, 1 }, 5.0));
 		return result;
 	}
 	
@@ -92,9 +92,9 @@ public class BasicOperationPerformerTest {
 		CycledListWithHeader<Coefficient> result = new CycledListWithHeader<Coefficient>();
 
 		result.addFirst(new Coefficient(new int[] { 2, 0, 0 }, 13.26));
-		result.addFirst(new Coefficient(new int[] { 3, 2, 1 }, 17.34));
+		result.addFirst(new Coefficient(new int[] { 3, 2, 1 }, 17.0));
 		result.addFirst(new Coefficient(new int[] { 4, 2, 2 }, 13.65));
-		result.addFirst(new Coefficient(new int[] { 5, 4, 3 }, 17.85));
+		result.addFirst(new Coefficient(new int[] { 5, 4, 3 }, 17.5));
 		return result;
 	}
 	

@@ -21,13 +21,10 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 		}
 	}
 
-	public Iterator<T> iterator() {
+	public CycledListIterator<T> iterator() {
 		return new CycledListWithHeadeIterator<T>(header);
 	}
 
-	public ListIterator<T> listIterator() {
-		return new CycledListWithHeadeIterator<T>(header);
-	}
 
 	private void init() {
 		header = new Entry<T>(null, null);
@@ -36,7 +33,7 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 
 
 	//Designed for polinom addition purposes
-	protected final class CycledListWithHeadeIterator<T> implements ListIterator<T> {
+	protected final class CycledListWithHeadeIterator<T> implements CycledListIterator<T> {
 
 		private Entry<T> previous;
 		private Entry<T> current;
@@ -76,34 +73,11 @@ public class CycledListWithHeader<T> extends CycledList<T> implements Iterable<T
 			current = newEntry;
 		}
 
-		@Override
-		public boolean hasPrevious() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public int nextIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public T previous() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int previousIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void set(T arg0) {
-			// TODO Auto-generated method stub
-
+		public void addAfter(T elementToAdd){
+			Entry<T> newEntry = new Entry<T>(elementToAdd, current.getNext());
+			current.setNext(newEntry);
+			previous = current;
+			current = newEntry;
 		}
 
 	}
