@@ -4,7 +4,7 @@ public class User {
 
 	private int inFloor;
 	private int outFloor;
-	private int giveUpTime;
+	private long giveUpTime;
 
 	public int getInFloor() {
 		return inFloor;
@@ -22,11 +22,11 @@ public class User {
 		this.outFloor = outFloor;
 	}
 
-	public int getGiveUpTime() {
+	public long getGiveUpTime() {
 		return giveUpTime;
 	}
 
-	public void setGiveUpTime(int giveUpTime) {
+	public void setGiveUpTime(long giveUpTime) {
 		this.giveUpTime = giveUpTime;
 	}
 }

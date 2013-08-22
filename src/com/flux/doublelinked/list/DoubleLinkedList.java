@@ -23,6 +23,36 @@ public class DoubleLinkedList<T> {
 		header.setPrevious(newEntry);
 	}
 
+	public T getFirst() {
+		return header.getNext() != header ? header.getNext().getValue() : null;
+	}
+
+	public T getLast() {
+		return header.getPrevious() != header ? header.getPrevious().getValue() : null;
+	}
+
+	public T retrieveFirst() {
+		T result = null;
+		if (header.getNext() != header) {
+			result = header.getNext().getValue();
+			header.setNext(header.getNext().getNext());
+			header.getNext().setPrevious(header);
+		}
+
+		return result;
+	}
+
+	public T retrieveLast() {
+		T result = null;
+		if (header.getPrevious() != header) {
+			result = header.getPrevious().getValue();
+			header.setPrevious(header.getPrevious().getPrevious());
+			header.getPrevious().setNext(header);
+		}
+
+		return result;
+	}
+
 	protected final class DoubleLinkedListIterator implements Iterator<T> {
 
 		private Entry<T> next;
