@@ -4,7 +4,7 @@ import com.flux.doublelinked.list.DoubleLinkedList;
 
 public class Model {
 	private DoubleLinkedList<User> waitingUsers;
-	private Elevator elevator;
+	private ElevatorController elevatorController;
 	private Thread elevatorThread;
 
 	public Model(){
@@ -16,11 +16,6 @@ public class Model {
 	}
 
 	public void callElevator(int floor) {
-		int currentFloor = elevator.getCurrentFloor();
-		if (currentFloor == floor) {
-			if (elevator.getActionQueue().getFirst().equals(ElevatorAction.PREPARE_TO_MOVE)) { //possible conflict between threads
-				elevator.openDoors(true);
-			}
-		}
+		elevatorController.callElevator(floor);
 	}
 }

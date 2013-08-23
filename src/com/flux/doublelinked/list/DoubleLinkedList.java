@@ -52,6 +52,10 @@ public class DoubleLinkedList<T> {
 
 		return result;
 	}
+	
+	public boolean isEmpty(){
+		return header.getNext() != header;
+	}
 
 	protected final class DoubleLinkedListIterator implements Iterator<T> {
 

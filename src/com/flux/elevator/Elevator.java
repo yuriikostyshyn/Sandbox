@@ -12,6 +12,7 @@ public class Elevator {
 	private boolean peopleMove = false; // doors open, people enter or leave elevator
 	private boolean elevatorIsNotUsed = false;
 	private boolean doorsOpen = false; // And elevator is not used
+	private boolean closingInterrupted = false;
 
 	private ElevatorState currentState = ElevatorState.NEUTRAL;
 	private int currentFloor = BASE_FLOOR;
@@ -55,21 +56,4 @@ public class Elevator {
 		this.currentFloor = currentFloor;
 	}
 
-	public void openDoors(boolean peopleEnter) {
-		if (peopleEnter) {
-			this.peopleMove = true;
-		} else {
-			this.doorsOpen = true;
-		}
-		
-		//TODO have to be finished
-	}
-
-	public DoubleLinkedList<ElevatorAction> getActionQueue() {
-		return actionQueue;
-	}
-
-	public void setActionQueue(DoubleLinkedList<ElevatorAction> actionQueue) {
-		this.actionQueue = actionQueue;
-	}
 }
