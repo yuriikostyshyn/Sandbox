@@ -7,6 +7,10 @@ public interface DimensionIterator<T> extends Iterator<T> {
 	public boolean hasNext();
 
 	public T next();
+	
+	public int rowId(); //return row id of element returned by next()
+	
+	public int columnId(); //return column id of element returned by next()
 
 	public void remove();
 

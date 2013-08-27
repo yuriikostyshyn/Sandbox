@@ -3,7 +3,7 @@ package com.flux.doublelinked.matrix;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
-import com.flux.doublelinked.matrix.SparsedMatrix.HorizontalIterator;
+import com.flux.doublelinked.matrix.SparsedMatrix.ColumnIterator;
 
 public class SparsedMatrix {
 
@@ -16,7 +16,10 @@ public class SparsedMatrix {
 	}
 
 	public void insertNewRow(int rowId) {
+		DimensionIterator<BigDecimal> iterator = iterator(Dimension.VERTICAL);
+		while (iterator.hasNext()) {
 
+		}
 	}
 
 	public void insertNewRow(int rowId, DimensionIterator<BigDecimal> rowIterator) {
@@ -33,16 +36,16 @@ public class SparsedMatrix {
 
 	// TODO DimensionIterator
 	public DimensionIterator<BigDecimal> iterator(Dimension dimension) {
-		return dimension.equals(Dimension.HORISONTAL) ? new HorizontalIterator() : new VerticalIterator();
+		return dimension.equals(Dimension.HORISONTAL) ? new ColumnIterator() : new RowIterator();
 	}
 
-	protected class VerticalIterator implements DimensionIterator<BigDecimal> {
+	protected class RowIterator implements DimensionIterator<BigDecimal> {
 		private Node previous;
 		private Node current;
 
-		protected VerticalIterator() {
+		protected RowIterator() {
 			this.current = header;
-			this.previous = null;
+			this.previous = header;
 		}
 
 		@Override
@@ -53,9 +56,7 @@ public class SparsedMatrix {
 		@Override
 		public BigDecimal next() {
 			if (hasNext()) {
-				if (previous == null) {
-					previous = current;
-				}
+				previous = current;
 				current = current.getTop();
 				return current.getValue();
 			}
@@ -79,18 +80,32 @@ public class SparsedMatrix {
 
 		@Override
 		public void addBefore(int row, int column, BigDecimal newElement) {
-			Node newNode = new Node(row, column, newElement, current, null);
-			previous.setTop(newNode);
-			previous = newNode;
+			if (previous != header && current != header) {
+				Node newNode = new Node(row, column, newElement, current, null);
+				previous.setTop(newNode);
+				previous = newNode;
+			} else{
+				throw new UnsupportedOperationException("you can't use this method before start of iteration");
+			}
+		}
+
+		@Override
+		public int rowId() {
+			return current.getRow();
+		}
+
+		@Override
+		public int columnId() {
+			return current.getColumn();
 		}
 	}
 
-	protected class HorizontalIterator implements DimensionIterator<BigDecimal> {
+	protected class ColumnIterator implements DimensionIterator<BigDecimal> {
 
 		private Node previous;
 		private Node current;
 
-		protected HorizontalIterator() {
+		protected ColumnIterator() {
 			this.current = header;
 			this.previous = null;
 		}
@@ -133,9 +148,19 @@ public class SparsedMatrix {
 			previous.setLeft(newNode);
 			previous = newNode;
 		}
+
+		@Override
+		public int rowId() {
+			return current.getRow();
+		}
+
+		@Override
+		public int columnId() {
+			return current.getColumn();
+		}
 	}
 
-	public final class Node {
+	private static final class Node {
 		private int row;
 		private int column;
 		private Node top;
