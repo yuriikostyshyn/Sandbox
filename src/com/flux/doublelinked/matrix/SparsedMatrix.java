@@ -73,12 +73,13 @@ public class SparsedMatrix {
 						throw new NoSuchElementException();
 					}
 				}
+				start = that;
 			}
 		}
 
 		@Override
 		public boolean hasNext() {
-			return current.getTop() != header;
+			return current.getTop() != start;
 		}
 
 		@Override
@@ -108,7 +109,7 @@ public class SparsedMatrix {
 
 		@Override
 		public void addBefore(int row, int column, BigDecimal newElement) {
-			if (previous != header && current != header) {
+			if (previous != start && current != start) {
 				Node newNode = new Node(row, column, newElement, current, null);
 				previous.setTop(newNode);
 				previous = newNode;
@@ -130,17 +131,32 @@ public class SparsedMatrix {
 
 	protected class ColumnIterator implements DimensionIterator<BigDecimal> {
 
+		private Node start;
 		private Node previous;
 		private Node current;
 
-		protected ColumnIterator() {
-			this.current = header;
-			this.previous = null;
+		protected ColumnIterator(int id) {
+			if (id < 0) {
+				this.start = header;
+				this.current = header;
+				this.previous = header;
+			} else {
+				Node that = header.getLeft();
+				while (that.getColumn() != id) {
+					if (that.getColumn() > id) {
+						that = that.getLeft();
+					} else {
+						throw new NoSuchElementException();
+					}
+				}
+
+				start = that;
+			}
 		}
 
 		@Override
 		public boolean hasNext() {
-			return current.getLeft() != header;
+			return current.getLeft() != start;
 		}
 
 		@Override
@@ -172,9 +188,13 @@ public class SparsedMatrix {
 
 		@Override
 		public void addBefore(int row, int column, BigDecimal newElement) {
-			Node newNode = new Node(row, column, newElement, current, null);
-			previous.setLeft(newNode);
-			previous = newNode;
+			if (previous != start && current != start) {
+				Node newNode = new Node(row, column, newElement, current, null);
+				previous.setLeft(newNode);
+				previous = newNode;
+			} else {
+				throw new UnsupportedOperationException("you can't use this method before start of iteration");
+			}
 		}
 
 		@Override
