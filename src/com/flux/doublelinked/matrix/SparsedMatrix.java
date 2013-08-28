@@ -2,6 +2,7 @@ package com.flux.doublelinked.matrix;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import com.flux.doublelinked.matrix.SparsedMatrix.ColumnIterator;
 
@@ -18,7 +19,10 @@ public class SparsedMatrix {
 	public void insertNewRow(int rowId) {
 		DimensionIterator<BigDecimal> iterator = iterator(Dimension.VERTICAL);
 		while (iterator.hasNext()) {
-
+			iterator.next();
+			if (iterator.rowId() < rowId) {
+				iterator.addBefore(rowId, -1, null);
+			}
 		}
 	}
 
@@ -27,7 +31,13 @@ public class SparsedMatrix {
 	}
 
 	public void insertNewColumn(int columnId) {
-
+		DimensionIterator<BigDecimal> iterator = iterator(Dimension.HORISONTAL);
+		while (iterator.hasNext()) {
+			iterator.next();
+			if (iterator.columnId() < columnId) {
+				iterator.addBefore(-1, columnId, null);
+			}
+		}
 	}
 
 	public void insertNewColumn(int columnId, DimensionIterator<BigDecimal> columnIterator) {
@@ -35,17 +45,35 @@ public class SparsedMatrix {
 	}
 
 	// TODO DimensionIterator
-	public DimensionIterator<BigDecimal> iterator(Dimension dimension) {
-		return dimension.equals(Dimension.HORISONTAL) ? new ColumnIterator() : new RowIterator();
+
+	protected DimensionIterator<BigDecimal> iterator(Dimension dimension) {
+		return iterator(dimension, -1);
+	}
+
+	public DimensionIterator<BigDecimal> iterator(Dimension dimension, int id) {
+		return dimension.equals(Dimension.HORISONTAL) ? new ColumnIterator(id) : new RowIterator(id);
 	}
 
 	protected class RowIterator implements DimensionIterator<BigDecimal> {
+		private Node start;
 		private Node previous;
 		private Node current;
 
-		protected RowIterator() {
-			this.current = header;
-			this.previous = header;
+		protected RowIterator(int id) {
+			if (id < 0) {
+				this.start = header;
+				this.current = header;
+				this.previous = header;
+			} else {
+				Node that = header.getLeft();
+				while (that.getColumn() != id) {
+					if (that.getColumn() > id) {
+						that = that.getLeft();
+					} else {
+						throw new NoSuchElementException();
+					}
+				}
+			}
 		}
 
 		@Override
@@ -84,7 +112,7 @@ public class SparsedMatrix {
 				Node newNode = new Node(row, column, newElement, current, null);
 				previous.setTop(newNode);
 				previous = newNode;
-			} else{
+			} else {
 				throw new UnsupportedOperationException("you can't use this method before start of iteration");
 			}
 		}
