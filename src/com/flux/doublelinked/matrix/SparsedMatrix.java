@@ -16,8 +16,90 @@ public class SparsedMatrix {
 		header.setLeft(header);
 	}
 
+	public void insertNewElement(int rowId, int columnId, BigDecimal value) {
+		Node rowHeader = getRowHeader(rowId);
+		Node columnHeader = getColumnHeader(columnId);
+
+	}
+
+	private Node getRowHeader(int rowId) {
+		return getElementByColumnHeaderAndRowId(header, rowId);
+	}
+
+	private Node getElementByColumnHeaderAndRowId(Node header, int rowId) {
+		return putElementIntoColumn(header, null, rowId);
+	}
+
+	private Node putElementIntoColumn(Node header, Node elementToPut, int rowId) {
+		Node element = header;
+		Node previousRow = header;
+		Node nextRow = header.getTop();
+		while (nextRow.getRow() >= rowId) {
+			if (nextRow.getRow() == rowId) {
+				element = nextRow;
+				if (elementToPut != null) {
+					element.setValue(elementToPut.getValue());
+				}
+				break;
+			} else {
+				previousRow = nextRow;
+				nextRow = nextRow.getTop();
+			}
+		}
+		if (element == header) {
+			if (elementToPut != null) {
+				element = elementToPut;
+				element.setTop(nextRow);
+				previousRow.setTop(element);
+			} else {
+				element = new Node(rowId, header.getColumn(), null, nextRow, null);
+				element.setLeft(element);
+				previousRow.setTop(element);
+			}
+		}
+		return element;
+	}
+
+	private Node getColumnHeader(int columnId) {
+		return getElementByRowHeaderAndColumnId(header, columnId);
+	}
+
+	private Node getElementByRowHeaderAndColumnId(Node header, int columnId) {
+		return putElementIntoRow(header, null, columnId);
+	}
+
+	private Node putElementIntoRow(Node header, Node elementToPut, int columnId) {
+		Node element = header;
+		Node previousColumn = header;
+		Node nextColumn = header.getLeft();
+		while (nextColumn.getColumn() >= columnId) {
+			if (nextColumn.getColumn() == columnId) {
+				element = nextColumn;
+				if (elementToPut != null) {
+					element.setValue(elementToPut.getValue());
+				}
+				break;
+			} else {
+				previousColumn = nextColumn;
+				nextColumn = nextColumn.getLeft();
+			}
+		}
+		if (element == header) {
+			if (elementToPut != null) {
+				element = elementToPut;
+				element.setLeft(nextColumn);
+				previousColumn.setLeft(element);
+			} else {
+				element = new Node(header.getRow(), columnId, null, null, nextColumn);
+				element.setTop(element);
+				previousColumn.setLeft(element);
+			}
+		}
+		return element;
+	}
+
 	public void insertNewRow(int rowId) {
-		DimensionIterator<BigDecimal> iterator = iterator(Dimension.VERTICAL);
+		DimensionIterator<BigDecimal> iterator = iterator(Dimension.ROW);
 		while (iterator.hasNext()) {
 			iterator.next();
 			if (iterator.rowId() < rowId) {
@@ -31,7 +113,7 @@ public class SparsedMatrix {
 	}
 
 	public void insertNewColumn(int columnId) {
-		DimensionIterator<BigDecimal> iterator = iterator(Dimension.HORISONTAL);
+		DimensionIterator<BigDecimal> iterator = iterator(Dimension.COLUMN);
 		while (iterator.hasNext()) {
 			iterator.next();
 			if (iterator.columnId() < columnId) {
@@ -51,7 +133,7 @@ public class SparsedMatrix {
 	}
 
 	public DimensionIterator<BigDecimal> iterator(Dimension dimension, int id) {
-		return dimension.equals(Dimension.HORISONTAL) ? new ColumnIterator(id) : new RowIterator(id);
+		return dimension.equals(Dimension.COLUMN) ? new ColumnIterator(id) : new RowIterator(id);
 	}
 
 	protected class RowIterator implements DimensionIterator<BigDecimal> {
@@ -265,7 +347,7 @@ public class SparsedMatrix {
 	}
 
 	public enum Dimension {
-		HORISONTAL(1), VERTICAL(2);
+		COLUMN(1), ROW(2);
 
 		private final int dimensionNumber;
 
