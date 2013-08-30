@@ -18,7 +18,74 @@ public class SparsedMatrix {
 
 	public void insertNewElement(int rowId, int columnId, BigDecimal value) {
 		Node rowHeader = getRowHeader(rowId);
+		Node newNode = putElementIntoRow(rowHeader, null, columnId);
+		newNode.setValue(value);
 		Node columnHeader = getColumnHeader(columnId);
+		putElementIntoColumn(columnHeader, newNode, rowId); // should be upgraded to increase perfomance
+	}
+
+	public BigDecimal getValue(int rowId, int columnId) {
+		Node element = header;
+		Node nextRow = header.getTop();
+		while (nextRow.getRow() >= rowId) {
+			if (nextRow.getRow() == rowId) {
+				element = nextRow;
+				break;
+			} else {
+				nextRow = nextRow.getTop();
+			}
+		}
+
+		if (element.getRow() == rowId) {
+			Node nextColumn = element.getLeft();
+			while (nextColumn.getColumn() >= columnId) {
+				if (nextColumn.getColumn() == columnId) {
+					element = nextColumn;
+					break;
+				} else {
+					nextColumn = nextColumn.getLeft();
+				}
+			}
+
+			if (element.getColumn() == columnId) {
+				return element.getValue();
+			}
+		}
+
+		return null;
+
+	}
+
+	public void setValue(int rowId, int columnId, BigDecimal value) {
+		Node element = header;
+		Node nextRow = header.getTop();
+		while (nextRow.getRow() >= rowId) {
+			if (nextRow.getRow() == rowId) {
+				element = nextRow;
+				break;
+			} else {
+				nextRow = nextRow.getTop();
+			}
+		}
+
+		if (element.getRow() == rowId) {
+			Node nextColumn = element.getLeft();
+			while (nextColumn.getColumn() >= columnId) {
+				if (nextColumn.getColumn() == columnId) {
+					element = nextColumn;
+					break;
+				} else {
+					nextColumn = nextColumn.getLeft();
+				}
+			}
+
+			if (element.getColumn() == columnId) {
+				element.setValue(value);
+				return;
+			}
+		}
+
+		throw new NoSuchElementException("there is no such element in matrix");
 
 	}
 
