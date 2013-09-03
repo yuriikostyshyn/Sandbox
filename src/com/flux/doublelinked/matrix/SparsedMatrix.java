@@ -9,11 +9,35 @@ import com.flux.doublelinked.matrix.SparsedMatrix.ColumnIterator;
 public class SparsedMatrix {
 
 	private Node header;
+	private int width;
+	private int height;
 
-	public SparsedMatrix() {
+	public SparsedMatrix(int width, int height) {
 		header = new Node(-1, -1, null, null, null);
 		header.setTop(header);
 		header.setLeft(header);
+		this.width = width;
+		this.height = height;
+	}
+
+	public Node getHeader() {
+		return header;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	public void insertNewElement(int rowId, int columnId, BigDecimal value) {
@@ -357,7 +381,7 @@ public class SparsedMatrix {
 		}
 	}
 
-	private static final class Node {
+	public static final class Node {
 		private int row;
 		private int column;
 		private Node top;
