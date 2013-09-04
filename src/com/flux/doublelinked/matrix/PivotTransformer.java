@@ -29,25 +29,48 @@ public class PivotTransformer {
 				Node p = rowHeaders[i];
 				Node p1 = p.getLeft();
 				pivotRowHeader = pivotRowHeader.getLeft();
-				while (pivotRowHeader.getColumn() > 0) {
-					int j = pivotRowHeader.getColumn();
+				int j = pivotRowHeader.getColumn();
+				while (j >= 0) {
 					while (p1.getColumn() > j) {
 						p = p1;
 						p1 = p.getLeft();
 					}
-					if (p1.getColumn() == j) {
-						// TODO pivotal transformation
-					} else {
-						// TODO insert new element
+
+					if (j != columnId) {
+
+						if (p1.getColumn() == j) {
+							p1.setValue(p1.getValue().subtract(pivotColumnHeader.getValue().multiply(pivotRowHeader.getValue())));
+							if (p1.getValue().subtract(BigDecimal.ZERO, new MathContext(5))
+									.compareTo(new BigDecimal(0.00005, new MathContext(6))) < 0) {
+								while (ptr[j].getTop().getRow() > i) {
+									ptr[j] = ptr[j].getTop();
+								}
+								ptr[j].setTop(p1.getTop());
+								p.setLeft(p1.getLeft());
+								p1 = p.getLeft();
+							} else {
+								ptr[j] = p1;
+								p = p1;
+								p1 = p.getLeft();
+							}
+						} else {
+							while (ptr[j].getTop().getRow() > i) {
+								ptr[j] = ptr[j].getTop();
+							}
+							Node newEntry = new Node(i, j, new BigDecimal(0), ptr[j].getTop(), p1); // can be initialized with value on
+																									// creation. But it requires more
+																									// complicated logic
+							ptr[j].setTop(newEntry);
+							p.setLeft(newEntry);
+							p1 = newEntry;
+							break;
+						}
 					}
 
-					if (j == columnId) {
-						break;
-					} else if (j < 0) {
-						pivotColumnHeader.setValue(pivotColumnHeader.getValue().divide(pivotValue.negate()));
-					}
 					pivotRowHeader = pivotRowHeader.getLeft();
+					j = pivotRowHeader.getColumn();
 				}
+				pivotColumnHeader.setValue(pivotColumnHeader.getValue().divide(pivotValue.negate()));
 			}
 			pivotColumnHeader = pivotColumnHeader.getTop();
 		}
